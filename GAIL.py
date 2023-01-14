@@ -19,7 +19,6 @@ from utils import load_mask_from_im
 
 from utils import mask_score,get_flat_grads,get_flat_params,set_params,conjugate_gradient,rescale_and_linesearch
 
-#https://github.com/hcnoh/gail-pytorch/blob/main/models/gail.py
 
 if torch.cuda.is_available():
     from torch.cuda import FloatTensor
@@ -732,7 +731,7 @@ def train_mask_demo(args,env,obs,acts,step_r,actset):
             plt.title('Importance map for mask_{}'.format(mask_idx))
             plt.axis('off')
             plt.imshow(img)
-            plt.savefig("./image/GAIL/" + env_name + "/pre_test/seed_{}_figure_{}.png".format(args.seed,mask_idx), dpi=500)
+            plt.savefig("./image/GAIL/" + env_name + "/test/seed_{}_figure_{}.png".format(args.seed,mask_idx), dpi=500)
             plt.close()
         del masked_o
         del masked_a
