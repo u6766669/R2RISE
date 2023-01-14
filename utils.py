@@ -8,9 +8,9 @@ def load_mask_from_im(env_name,model_type,seed,dl):
     inverse = True
 
     if model_type == 'GAIL':
-        im = np.load('./output_npz/' + env_name + '/pre/GAIL/' + model_type + '_importance_map_' + str(seed) + '.npz')
+        im = np.load('./output_npz/' + env_name + '/' + model_type + '_importance_map_' + str(seed) + '.npz')
     if model_type == 'BC':
-        im = np.load('./output_npz/' + env_name + '/test_' + model_type + '_importance_map_' + str(seed) + '.npz')
+        im = np.load('./output_npz/' + env_name + '/' + model_type + '_importance_map_' + str(seed) + '.npz')
     im = im['arr_0']
 
     im_flat = np.sort(im,axis=None)

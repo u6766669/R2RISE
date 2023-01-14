@@ -8,9 +8,6 @@ Example = namedtuple('Example', 'state action')
 
 def normalize_state(obs):
 
-    #print(obs_highs)
-    #print(obs_lows)
-    #return  2.0 * (obs - obs_lows) / (obs_highs - obs_lows) - 1.0
     return obs/255.0
 
 

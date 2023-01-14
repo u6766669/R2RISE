@@ -114,12 +114,7 @@ def generate_novice_demos(env, env_name, agent, model_dir, checkpoint_path):
             # to distinguish the masked action and action 0
             action[0] = action[0] + 1
             # env.render()
-            '''
-            im = transforms.ToPILImage()(ob_processed).convert("RGB")
-            plt.imshow(im)
-            plt.title(action)
-            plt.pause(1)
-            '''
+
             action_set_1.add(action[0])
             obsvtion.append(ob_processed)
             ob_action_seq.append([ob_processed, action[0]])
@@ -167,12 +162,7 @@ class Network(nn.Module):
         self.conv3 = nn.Conv2d(64, 64, kernel_size=3, stride=1) #7*7*64
         self.fc1 = nn.Linear(64 * 7 * 7, 512)
         self.output = nn.Linear(512, num_output_actions)
-        '''
-                self.conv1 = nn.Conv2d(hist_len, 32, kernel_size=8, stride=4)
-                self.conv2 = nn.Conv2d(32, 64, kernel_size=4, stride=2)
-                self.conv3 = nn.Conv2d(64, 64, kernel_size=3, stride=1)
-                self.fc1 = nn.Linear(64 * 7 * 7, 512)
-                self.output = nn.Linear(512, num_output_actions)'''
+
 
     def forward(self, input):
         conv1_output = F.relu(self.conv1(input))
@@ -180,14 +170,7 @@ class Network(nn.Module):
         conv3_output = F.relu(self.conv3(conv2_output))
         fc1_output = F.relu(self.fc1(conv3_output.contiguous().view(conv3_output.size(0), -1)))
         output = self.output(fc1_output)
-        '''
-                trans_input = input.permute(0, 3, 1, 2)
-                conv1_output = F.relu(self.conv1(trans_input))
-                conv2_output = F.relu(self.conv2(conv1_output))
-                conv3_output = F.relu(self.conv3(conv2_output))
-                conv3_output = conv3_output.contiguous().view(conv3_output.size(0),-1)
-                fc1_output = F.relu(self.fc1(conv3_output))
-                final_outputs = self.output(fc1_output)'''
+
         return conv1_output, conv2_output, conv3_output, fc1_output, output
 
 class Imitator:
@@ -644,70 +627,4 @@ if __name__ == "__main__":
         plt.imshow(img)
         plt.savefig("./image/BC/"+env_name+"/test_seed_{}_explanation_map.png".format(args.seed),dpi=600)
         plt.close()
-    '''
-    episode_index_counter = 0
-    num_data = 0
-    action_set = set()
-    action_cnt_dict = {}
-    data = []
-    cnt = 0
-    while (demonstrations):
-        print("adding demonstration", cnt)
-        cnt += 1
-        episode = demonstrations[0]
-        for sa in episode:
-            state, action = sa
-            # action = action
-            action_set.add(action)
-            if action in action_cnt_dict:
-                action_cnt_dict[action] += 1
-            else:
-                action_cnt_dict[action] = 0
-            # transpose into 4x84x84 format
-            state = np.transpose(np.squeeze(state), (2, 0, 1))
-            # state = np.squeeze(state)
-            data.append((state, action))
-        del demonstrations[0]
-    del demonstrations
 
-    # take 10% as validation data
-    np.random.shuffle(data)
-    training_data_size = int(len(data) * 0.8)
-    training_data = data[:training_data_size]
-    validation_data = data[training_data_size:]
-    print("training size = {}, validation size = {}".format(len(training_data), len(validation_data)))
-    training_dataset = dataset.Dataset(training_data_size, hist_length)
-    validation_dataset = dataset.Dataset(len(validation_data), hist_length)
-    for state, action in training_data:
-        training_dataset.add_item(state, action)
-        num_data += 1
-        if num_data == training_dataset.size:
-            print("data set full")
-            break
-
-    for state, action in validation_data:
-        validation_dataset.add_item(state, action)
-        num_data += 1
-        if num_data == validation_dataset.size:
-            print("data set full")
-            break
-    del training_data, validation_data, data
-    print("available actions", action_set)
-    print(action_cnt_dict)
-
-    agent = train(args.env_name,
-                  action_set,
-                  args.learning_rate,
-                  args.l2_penalty,
-                  args.minibatch_size,
-                  args.hist_len,
-                  args.checkpoint_dir,
-                  args.num_bc_steps,
-                  training_dataset,
-                  validation_dataset,
-                  args.num_bc_eval_episodes,
-                  0.01,
-                  extra_checkpoint_info)
-
-    eval(args.env_name,agent)
-'''

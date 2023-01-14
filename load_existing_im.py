@@ -161,9 +161,9 @@ def save_array_to_img(img_ary, title, url, need_axis = True):
 def load_im(env_name,seed,model):
     print(env_name, " + ", model, " + ", str(seed))
     if model == 'GAIL':
-        im = np.load('./output_npz/'+env_name+'/pre/GAIL/'+model+'_importance_map_'+str(seed)+'.npz')
+        im = np.load('./output_npz/'+env_name+'/'+model+'_importance_map_'+str(seed)+'.npz')
     if model =='BC':
-        im = np.load('./output_npz/' + env_name + '/test_' + model + '_importance_map_' + str(seed) + '.npz')
+        im = np.load('./output_npz/' + env_name + '/' + model + '_importance_map_' + str(seed) + '.npz')
     im = im['arr_0']
     return im
 
